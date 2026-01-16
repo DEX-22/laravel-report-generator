@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::controller(ReportController::class)->group(function(){
+
+    Route::get('/','index');
+    Route::post('/report','getReportByRange')->name('general.report.post');
+});
