@@ -17,16 +17,16 @@ return new class extends Migration
                 BEGIN
                         # CREDIT CARD REPORT
                         select rep_cc.id as report_id,
-                                subs.full_name,subs.document,subs.email,subs.phone,
-                                'Tarjeta de crédito' AS tipo_deuda,
-                                'No registra' AS situacion,
-                                'No registra' as atraso,
-                                rep_cc.bank as entidad,
-                                rep_cc.line - rep_cc.used as monto_total,
-                                rep_cc.line as linea_total, 
-                                rep_cc.used as linea_usada,
-                                sub_rep.created_at as fecha_reporte,
-                                'pendiente' as estado
+                                        subs.full_name,subs.document,subs.email,subs.phone,
+                                        'Tarjeta de crédito' AS debt_type,
+                                        '' AS situation,
+                                        '' as late_payment,
+                                        rep_cc.bank as entity,
+                                        rep_cc.line - rep_cc.used as total_amount,
+                                        rep_cc.line as total_line, 
+                                        rep_cc.used as total_used,
+                                        sub_rep.created_at as report_date,
+                                        'normal' as general_status
 
                         from subscription_reports as sub_rep
                         join subscriptions as subs on subs.id = sub_rep.subscription_id 
@@ -35,16 +35,16 @@ return new class extends Migration
                         UNION ALL
                         # LOANS REPORT
                         select rep_loa.id as report_id,
-                                subs.full_name,subs.document,subs.email,subs.phone,
-                                'Préstamo' AS tipo_deuda,
-                                rep_loa.status AS situacion,
-                                rep_loa.expiration_days as atraso,
-                                rep_loa.bank as entidad,
-                                rep_loa.amount as monto_total,
-                                'NO aplica' as linea_total, 
-                                'NO aplica' as linea_usada,
-                                sub_rep.created_at as fecha_reporte,
-                                'pendiente' as estado
+                                        subs.full_name,subs.document,subs.email,subs.phone,
+                                        'Préstamo' AS debt_type,
+                                        rep_loa.status AS situation,
+                                        rep_loa.expiration_days as late_payment,
+                                        rep_loa.bank as entity,
+                                        rep_loa.amount as total_amount,
+                                        '' as total_line, 
+                                        '' as total_used,
+                                        sub_rep.created_at as report_date,
+                                        IF(rep_loa.expiration_days > 0 , 'perdida' , 'normal') as general_status
                         from subscription_reports as sub_rep
                         join subscriptions as subs on subs.id = sub_rep.subscription_id 
                         join report_loans as rep_loa on rep_loa.subscription_report_id = sub_rep.id
@@ -52,16 +52,16 @@ return new class extends Migration
                         UNION ALL
                         # OTHER DEBTS REPORT
                         select rep_od.id as report_id,
-                                subs.full_name,subs.document,subs.email,subs.phone,
-                                'Otra deuda' AS tipo_deuda,
-                                'No registra' AS situacion,
-                                rep_od.expiration_days as atraso,
-                                rep_od.entity as entidad,
-                                rep_od.amount as monto_total,
-                                'NO aplica' as linea_total, 
-                                'NO aplica' as linea_usada,
-                                sub_rep.created_at as fecha_reporte,
-                                'pendiente' as estado
+                                        subs.full_name,subs.document,subs.email,subs.phone,
+                                        'Otra deuda' AS tipo_deuda,
+                                        '' AS situacion,
+                                        rep_od.expiration_days as late_payment,
+                                        rep_od.entity as entity,
+                                        rep_od.amount as total_amount,
+                                        '' as total_line, 
+                                        '' as total_used,
+                                        sub_rep.created_at as report_date,
+                                        IF(rep_od.expiration_days > 0 , 'perdida' , 'normal') as general_status
                         from subscription_reports as sub_rep
                         join subscriptions as subs on subs.id = sub_rep.subscription_id 
                         join report_other_debts as rep_od on rep_od.subscription_report_id = sub_rep.id
