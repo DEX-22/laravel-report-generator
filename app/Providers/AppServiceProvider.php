@@ -17,10 +17,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
-            IReportService::class,
-            ReportService::class
-        );
     }
 
     /**
