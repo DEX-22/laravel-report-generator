@@ -33,7 +33,7 @@ class FailedDownloadEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('notifications.1'),
         ];
     }
 }

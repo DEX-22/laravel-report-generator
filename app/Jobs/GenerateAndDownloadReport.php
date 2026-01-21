@@ -7,6 +7,7 @@ use App\Events\FinishDownloadEvent;
 use App\Exports\GeneralReportExport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -31,9 +32,9 @@ class GenerateAndDownloadReport implements ShouldQueue
     {
         $folder = "reports";
         $fileName = "General report ({$this->start}-{$this->end}).xlsx";
-        $url = storage_path("$folder/$fileName");
-        $result = Excel::store(new GeneralReportExport($this->start,$this->end), $url);
-
+        // $url = storage_path("$folder/$fileName");
+        $result = Excel::store(new GeneralReportExport($this->start,$this->end), "$folder/$fileName",'local');
+        Log::info("adasd",[$folder,$fileName]);
         if($result){
             $signedUrl = URL::temporarySignedRoute('general.report.download',now()->addMinutes(10),[
                 'folder' => $folder, 'filename' => $fileName

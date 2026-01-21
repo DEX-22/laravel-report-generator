@@ -7,5 +7,5 @@ Route::controller(ReportController::class)->group(function(){
 
     Route::get('/','index');
     Route::post('/report','getReportByRange')->name('general.report.post');
-    Route::get('/report/download','downloadSavedReport')->name('general.report.download')->middleware('signed');
+    Route::get('/report/download/{folder}/{filename}','downloadSavedReport')->name('general.report.download')->middleware('signed');
 });

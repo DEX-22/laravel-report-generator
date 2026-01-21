@@ -33,11 +33,20 @@ Este proyecto es una aplicación Laravel para la generación de reportes financi
    ```bash
    php artisan serve
    ```
+6. Inicia el servidor de colas (para jobs y notificaciones):
+   ```bash
+   php artisan queue:work
+   ```
+7. Inicia el servidor de WebSockets (Laravel Reverb):
+   ```bash
+   php artisan reverb:start
+   ```
 
 ## Uso
 
 - Accede a la aplicación en tu navegador en `http://localhost:8000`.
 - Ingresa el rango de fechas y genera el reporte.
+- Recibirás una notificación en tiempo real cuando el reporte esté listo, gracias a Laravel Reverb y WebSockets.
 
 ## Estructura principal
 - `app/Http/Controllers/` — Controladores de la lógica de reportes.
