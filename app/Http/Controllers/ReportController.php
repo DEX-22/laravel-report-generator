@@ -22,7 +22,6 @@ class ReportController extends Controller
     }
     public function downloadSavedReport($folder,$filename){
         $url = storage_path("app/private/$folder/$filename");
-        Log::info("url: $folder/$filename",[$url]);
 
         if (!file_exists($url)) {
             abort(404);

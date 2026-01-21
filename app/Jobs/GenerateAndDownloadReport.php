@@ -34,7 +34,7 @@ class GenerateAndDownloadReport implements ShouldQueue
         $fileName = "General report ({$this->start}-{$this->end}).xlsx";
         // $url = storage_path("$folder/$fileName");
         $result = Excel::store(new GeneralReportExport($this->start,$this->end), "$folder/$fileName",'local');
-        Log::info("adasd",[$folder,$fileName]);
+        
         if($result){
             $signedUrl = URL::temporarySignedRoute('general.report.download',now()->addMinutes(10),[
                 'folder' => $folder, 'filename' => $fileName

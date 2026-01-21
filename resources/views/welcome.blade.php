@@ -108,6 +108,9 @@
             function hideLink(){
                 reportResult.style.display = "none"
             }
+            function showError(error){
+                reportResult.innerHTML = error
+            }
         </script>
     </body>
 </html>

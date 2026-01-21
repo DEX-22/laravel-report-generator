@@ -16,6 +16,7 @@ window.Echo = new Echo({
 window.Echo.channel("notifications.1")
             .listen(`FailedDownloadEvent`, (e) => {
                 hideLoader()
+                showError(e.message)
             })
             .listen(`FinishDownloadEvent`, (e) => {
                 hideLoader(e.url)
