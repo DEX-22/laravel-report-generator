@@ -84,6 +84,7 @@
 
                     if(!response.ok) {
                         reportResult.innerHTML = `<div class='text-red-600'>Error al generar el reporte. Código: ${response.status}</div>`
+                        hideLoader()
                     }
                 } catch (err) {
                     reportResult.innerHTML = `<div class='text-red-600'>Error de red o del servidor.</div>`

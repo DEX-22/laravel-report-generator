@@ -12,11 +12,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {       
+    public function __construct(protected IReportService $reportService) {}
     public function index(Request $request){
         return view('welcome');
     }
     public function getReportByRange(ReportByRangeRequest $request){
-        GenerateAndDownloadReport::dispatch($request->start,$request->end);
+        GenerateAndDownloadReport::dispatch($this->reportService,$request->start,$request->end);
 
         return response()->json();
     }

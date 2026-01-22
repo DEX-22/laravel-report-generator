@@ -2,25 +2,23 @@
 
 namespace App\Exports;
 
+use App\Services\IReportService;
 use Generator;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\FromGenerator;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class GeneralReportExport implements FromArray,WithHeadings,ShouldAutoSize
+class GeneralReportExport implements FromGenerator,WithHeadings,ShouldAutoSize
 {
-    public string $start;
-    public string $end;
-    public function __construct(string $start,string $end) {
-        $this->start = $start;
-        $this->end = $end;
-    }
+    public function __construct( 
+        protected IReportService $service,
+        public string $start,
+        public string $end) {}
 
-    public function array(): array
+    public function generator(): Generator
     {
-        return DB::select("CALL sp_general_debts_report(?,?)", [$this->start, $this->end]);
-        
+        return $this->service->getGeneralDebtsReport($this->start,$this->end);
     }
 
     public function headings(): array
