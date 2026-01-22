@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,8 +24,8 @@ class ReportByRangeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "start" => 'required|date',
-            "end" => 'required|date'
+            'start' => 'required|date',
+            'end' => 'required|date',
         ];
     }
 }

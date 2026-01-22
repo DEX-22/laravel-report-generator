@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Events\FailedDownloadEvent;
@@ -24,32 +26,34 @@ class GenerateAndDownloadReport implements ShouldQueue
         protected IReportService $reportService,
         public string $start,
         public string $end
-    ){}
+    ) {
+    }
+
     public function failed(Throwable $exception): void
     {
         broadcast(new FailedDownloadEvent());
         Log::error('[ERR 001] Report generation failed: ' . $exception->getMessage());
     }
-     
 
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $folder = "reports";
+        $folder = 'reports';
         $fileName = "General report ({$this->start}-{$this->end}).xlsx";
-        
-        $result = Excel::store(new GeneralReportExport($this->reportService,$this->start,$this->end), "$folder/$fileName",'local');
-        
-        if($result){
-            $signedUrl = URL::temporarySignedRoute('general.report.download',now()->addMinutes(10),[
-                'folder' => $folder, 'filename' => $fileName
-            ]); 
+
+        $result = Excel::store(new GeneralReportExport($this->reportService, $this->start, $this->end), "{$folder}/{$fileName}", 'local');
+
+        if ($result) {
+            $signedUrl = URL::temporarySignedRoute('general.report.download', now()->addMinutes(10), [
+                'folder' => $folder,
+                'filename' => $fileName,
+            ]);
 
             broadcast(new FinishDownloadEvent($signedUrl));
-        }else{
+        } else {
             broadcast(new FailedDownloadEvent());
         }
-    } 
+    }
 }
